@@ -1,7 +1,7 @@
 Ansistrano
 ==========
 
-[![Build Status](https://travis-ci.org/ansistrano/deploy.svg?branch=master)](https://travis-ci.org/ansistrano/deploy)
+[![Build Status](https://travis-ci.com/ansistrano/deploy.svg?branch=master)](https://travis-ci.com/ansistrano/deploy)
 [![Total Deployments](https://img.shields.io/badge/dynamic/json.svg?label=overall&uri=https%3A%2F%2Fansistrano.com%2Finfo&query=deployments.total&colorB=green&suffix=%20deployments)](https://ansistrano.com)
 [![Year Deployments](https://img.shields.io/badge/dynamic/json.svg?label=year&uri=https%3A%2F%2Fansistrano.com%2Finfo&query=deployments.year&colorB=green&suffix=%20deployments)](https://ansistrano.com)
 [![Month Deployments](https://img.shields.io/badge/dynamic/json.svg?label=month&uri=https%3A%2F%2Fansistrano.com%2Finfo&query=deployments.month&colorB=green&suffix=%20deployments)](https://ansistrano.com)
@@ -62,10 +62,13 @@ Is Ansistrano ready to be used? Here are some companies currently using it:
 * [CridaDemocracia](https://cridademocracia.org)
 * [Cycloid](http://www.cycloid.io)
 * [Deliverea](https://www.deliverea.com/)
+* [DevOps Barcelona Conference](https://devops.barcelona/)
 * [EnAlquiler](http://www.enalquiler.com/)
 * [Euromillions.com](http://euromillions.com/)
 * [Finizens](https://finizens.com/)
+* [FloraQueen](https://www.floraqueen.com/)
 * [Fluxus](http://www.fluxus.io/)
+* [Geocalia](https://geocalia.com/)
 * [Gstock](http://www.g-stock.es)
 * [HackSoft](https://hacksoft.io/)
 * [HackConf](https://hackconf.bg/en/)
@@ -83,6 +86,10 @@ Is Ansistrano ready to be used? Here are some companies currently using it:
 * [Ofertix](http://www.ofertix.com)
 * [Òmnium Cultural](https://www.omnium.cat)
 * [OpsWay Software Factory](http://opsway.com)
+* [Parkimeter](https://parkimeter.com)
+* [PHP Barcelona Conference](https://php.barcelona/)
+* [Scoutim](https://scoutim.com)
+* [Socialnk](https://socialnk.com/)
 * [Spotahome](https://www.spotahome.com)
 * [Suntransfers](http://www.suntransfers.com)
 * [TechPump](http://www.techpump.com/)
@@ -316,12 +323,17 @@ vars:
   ansistrano_deploy_to: "/var/www/my-app" # Base path to deploy to.
   ansistrano_version_dir: "releases" # Releases folder name
   ansistrano_current_dir: "current" # Softlink name. You should rarely changed it.
+  ansistrano_rollback_to_release: "" # If specified, the application will be rolled back to this release version; previous release otherwise.
+  ansistrano_remove_rolled_back: yes # You can change this setting in order to keep the rolled back release in the server for later inspection
+  ansistrano_allow_anonymous_stats: yes
 
   # Hooks: custom tasks if you need them
-  ansistrano_before_symlink_tasks_file: "{{ playbook_dir }}/<your-deployment-config>/my-before-symlink-tasks.yml"
-  ansistrano_after_symlink_tasks_file: "{{ playbook_dir }}/<your-deployment-config>/my-after-symlink-tasks.yml"
-  ansistrano_before_cleanup_tasks_file: "{{ playbook_dir }}/<your-deployment-config>/my-before-cleanup-tasks.yml"
-  ansistrano_after_cleanup_tasks_file: "{{ playbook_dir }}/<your-deployment-config>/my-after-cleanup-tasks.yml"
+  ansistrano_rollback_before_setup_tasks_file: "{{ playbook_dir }}/<your-deployment-config>/my-rollback-before-setup-tasks.yml"
+  ansistrano_rollback_after_setup_tasks_file: "{{ playbook_dir }}/<your-deployment-config>/my-rollback-after-setup-tasks.yml"
+  ansistrano_rollback_before_symlink_tasks_file: "{{ playbook_dir }}/<your-deployment-config>/my-rollback-before-symlink-tasks.yml"
+  ansistrano_rollback_after_symlink_tasks_file: "{{ playbook_dir }}/<your-deployment-config>/my-rollback-after-symlink-tasks.yml"
+  ansistrano_rollback_before_cleanup_tasks_file: "{{ playbook_dir }}/<your-deployment-config>/my-rollback-before-cleanup-tasks.yml"
+  ansistrano_rollback_after_cleanup_tasks_file: "{{ playbook_dir }}/<your-deployment-config>/my-rollback-after-cleanup-tasks.yml"
 ```
 
 Multistage environment (devel, preprod, prod, etc.)
@@ -450,58 +462,58 @@ PLAY [Deploy last wishes app to my server] ************************************
 GATHERING FACTS ***************************************************************
 ok: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Ensure deployment base path exists] ***
+TASK: [ansistrano.deploy | Ensure deployment base path exists] ***
 ok: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Ensure releases folder exists] ***
+TASK: [ansistrano.deploy | Ensure releases folder exists] ***
 ok: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Ensure shared elements folder exists] ***
+TASK: [ansistrano.deploy | Ensure shared elements folder exists] ***
 ok: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Get release timestamp] ***********
+TASK: [ansistrano.deploy | Get release timestamp] ***********
 changed: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Get release path] ****************
+TASK: [ansistrano.deploy | Get release path] ****************
 changed: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Get releases path] ***************
+TASK: [ansistrano.deploy | Get releases path] ***************
 changed: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Get shared path (in rsync case)] ***
+TASK: [ansistrano.deploy | Get shared path (in rsync case)] ***
 changed: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Rsync application files to remote shared copy (in rsync case)] ***
+TASK: [ansistrano.deploy | Rsync application files to remote shared copy (in rsync case)] ***
 changed: [quepimquepam.com -> 127.0.0.1]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Deploy existing code to servers] ***
+TASK: [ansistrano.deploy | Deploy existing code to servers] ***
 changed: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Deploy existing code to remote servers] ***
+TASK: [ansistrano.deploy | Deploy existing code to remote servers] ***
 skipping: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Update remote repository] ********
+TASK: [ansistrano.deploy | Update remote repository] ********
 skipping: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Export a copy of the repo] *******
+TASK: [ansistrano.deploy | Export a copy of the repo] *******
 skipping: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Deploy code from to servers] *****
+TASK: [ansistrano.deploy | Deploy code from to servers] *****
 skipping: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Copy release version into REVISION file] ***
+TASK: [ansistrano.deploy | Copy release version into REVISION file] ***
 changed: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Touches up the release code] *****
+TASK: [ansistrano.deploy | Touches up the release code] *****
 changed: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Change softlink to new release] ***
+TASK: [ansistrano.deploy | Change softlink to new release] ***
 changed: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Reload Apache] *******************
+TASK: [ansistrano.deploy | Reload Apache] *******************
 changed: [quepimquepam.com]
 
-TASK: [carlosbuenosvinos.ansistrano-deploy | Clean up releases] ***************
+TASK: [ansistrano.deploy | Clean up releases] ***************
 skipping: [quepimquepam.com]
 
 PLAY RECAP ********************************************************************
